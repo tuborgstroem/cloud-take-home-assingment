@@ -20,3 +20,4 @@ spec:
             - containerPort: 8000
       securityContext:
         runAsNonRoot: true
+        runAsUser: 1000
