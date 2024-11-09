@@ -18,6 +18,12 @@ spec:
           image: cat-app:v1
           ports:
             - containerPort: 8000
+          env:
+            - name: CAT_API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: cat-facts-config
+                  key: CAT_API_URL
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000

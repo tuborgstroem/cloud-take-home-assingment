@@ -2,7 +2,7 @@ import express from 'express';
 import fetch from 'node-fetch'; 
 
 const app = express();
-const apiUrl = 'https://cat-fact.herokuapp.com/facts/random';
+const apiUrl = process.env.CAT_API_URL;
 
 app.get('/healthz', (_req, res) => {
   res.json({ status: 'UP', uptime: process.uptime() });
