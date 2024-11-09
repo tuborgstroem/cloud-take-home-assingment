@@ -1,0 +1,22 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cat-facts-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cat-facts-app
+  template:
+    metadata:
+      labels:
+        app: cat-facts-app
+    spec:
+      containers:
+        - name: app
+          image: cat-app:v1
+          ports:
+            - containerPort: 8000
+      securityContext:
+        runAsNonRoot: true
