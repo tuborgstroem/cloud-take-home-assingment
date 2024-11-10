@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: cat-facts-config
 data:
-  CAT_API_URL: "https://cat-fact.herokuapp.com/facts/random"
+  CAT_API_URL: "https://catfact.ninja/fact?"

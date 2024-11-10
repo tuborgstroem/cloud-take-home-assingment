@@ -12,7 +12,8 @@ app.get('/random-cat-fact', async (_req, res) => {
   try {
     const response = await fetch(apiUrl);
     const data = await response.json();
-    const catFact = data.text;
+    res.log.json(data);
+    const catFact = data.fact;
     res.json({ catFact });
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while fetching the cat fact' });
