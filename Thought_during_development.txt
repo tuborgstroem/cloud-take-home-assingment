@@ -1,3 +1,4 @@
+Solve a bug.
 Diagnosis what goes wrong? 
 
 $kubectl get pods
