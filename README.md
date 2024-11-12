@@ -113,7 +113,68 @@ An error occurred in the application and your page could not be served. If you a
 heroku logs --tail
 
 I replace the url with https://catfact.ninja/fact? as this also provides cat facts.
+Now the hardcoded url has been made into an environment variable. And it works.
+
+_____________________________________________________________________________
+Questions & Answers
+1. What else should we think about when making the application production-ready?
+
+We will need to setup testing and make them park of the CI/CD pipeline. So a unit test to ensure the service works as intended with a mock server. handling one or more mock responses to ensure that the layout doesn't cause errors in the service.
+Other integration can be to verify that the external API works as intended so sending a request and verifying that the link works and having one or more links that can be contacted in the case that one does not work, and minimize disruptions.
+We will need a deployment pipeline for our service so we can automate and don't have to build, deploy and test manually. 
+
+With the tests some parameters to use a metrics for raise incidents for when the service fails, and alerting eg. by sending a message in slack. 
+
+2. What resources could we introduce to enable another application to speak with this one? What if we wanted to reach it outside of the cluster?
+
+We will also have to expose or endpoint for internat and explore external use. 
+
+for internal use Kubernetes can be used to define the service in other services in the cluster. So we can define the cat-facts-service name and kubernetes allows us to use is as a DNS entry, within the same namespace as http://cat-facts-service and other namespaces http://cat-facts-service.<namespace>.svc.cluster.local. 
+
+For external use we can set up an Ingress that provides HTTP and HTTPS routing to services in the cluster
+
+{
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cat-facts-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: cat-facts.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: cat-facts-service
+                port:
+                  number: 80
+}
  
+3. How can we secure communication between applications within the cluster?
+
+We should set up Kubernetes network policies to restrict access to the server to choose which service should be able to access the cat-facts-service while blocking access from other services that should not be able to communicate 
+In the ingress we can enable TLS to encrypt traffic from external users and be compatible with Https so when going to the endpoint, search engines will not report the endpoint as not safe. 
+
+4. In an ideal world, how would a deployment pipeline look for this application?
+
+First we need a build stage to compile the code. Here unit tests should be run and ensure that they pass, thus validating functionality. 
+This is also a place that can be used to scan Dependencies to check for vulnerabilities.
+
+Then we will need to package the build. This include building the Docker container and creating the unique version tag.
+
+Now we can run or integration tests. If these pass deploying the service to a test environment where we can do End-to-end testing to validate the service work with the other services in the system.
+
+If all is working in test enviroment the service can be deployed to production environment. 
+
+
+5. We'd love your feedback. What did you think of the assignment?
+
+I really liked the assingment. It was fun to setup a service and actually use kubernetes to complete the Assingment and being able to play around with Kubernetes overall a fun assingment.  
+
 
 
 
