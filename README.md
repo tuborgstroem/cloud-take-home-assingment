@@ -1,3 +1,6 @@
+###Cloud take home assignment. 
+##Author: Tobias Borgstrøm
+
 Solve a bug.
 Diagnosis what goes wrong? 
 
